@@ -7,6 +7,7 @@ export default async function Home() {
   const { data: articles } = await supabase
     .from("articles")
     .select("*, images(*), paragraphs(*)")
+    .eq("is_deleted", false)
     .order("date", { ascending: false });
 
   return (
