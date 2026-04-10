@@ -1,18 +1,26 @@
+"use client";
+
 import { Article } from "@/lib/types";
 import formatDate from "@/lib/formatDate";
+import { useRouter } from "next/navigation";
 
 interface AdminPanelProps {
   articles: Article[];
 }
 
 const AdminPanel = ({ articles }: AdminPanelProps) => {
+  const router = useRouter();
+
   return (
     <div className="flex flex-col gap-y-3 px-7 pb-8 bg-background">
       <div className="flex justify-between items-center pt-6 pb-3">
         <h1 className="text-header text-[1.9rem] font-semibold ml-2">
           Admin panel
         </h1>
-        <button className="bg-dark-green text-white text-lg py-2 px-6 rounded-lg cursor-pointer">
+        <button
+          className="bg-dark-green text-white text-lg py-2 px-6 rounded-lg cursor-pointer"
+          onClick={() => router.push("/admin/dashboard/add")}
+        >
           + Novi članak
         </button>
       </div>

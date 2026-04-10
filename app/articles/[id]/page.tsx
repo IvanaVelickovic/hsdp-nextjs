@@ -28,6 +28,8 @@ export default async function Page({
   );
 }
 
+export const dynamic = "force-static";
+
 export async function generateStaticParams() {
   const { data } = await supabase.from("articles").select("article_id");
   return data?.map((a) => ({ id: String(a.article_id) })) ?? [];
