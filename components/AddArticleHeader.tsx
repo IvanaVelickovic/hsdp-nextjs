@@ -3,9 +3,18 @@ import Link from "next/link";
 interface AddArticleHeaderProps {
   selected: number;
   setSelected: React.Dispatch<React.SetStateAction<number>>;
+  submitting: boolean;
+  onSubmit: () => void;
+  add: boolean;
 }
 
-const AddArticleHeader = ({ selected, setSelected }: AddArticleHeaderProps) => {
+const AddArticleHeader = ({
+  selected,
+  setSelected,
+  submitting,
+  onSubmit,
+  add,
+}: AddArticleHeaderProps) => {
   const selectedStyle = "border-b-2 px-2 cursor-pointer";
   return (
     <div className="bg-white pt-4 px-6">
@@ -16,10 +25,22 @@ const AddArticleHeader = ({ selected, setSelected }: AddArticleHeaderProps) => {
               X
             </p>
           </Link>
-          <h1 className="text-header text-3xl font-semibold">Novi članak</h1>
+          <h1 className="text-header text-3xl font-semibold">
+            {add ? "Novi članak" : "Doradi članak"}
+          </h1>
         </div>
-        <button className="bg-dark-green text-white text-xl py-2 px-6 rounded-lg cursor-pointer">
-          Spremi
+        <button
+          className="bg-dark-green text-white text-xl py-2 px-6 rounded-lg cursor-pointer"
+          onClick={onSubmit}
+          disabled={submitting}
+        >
+          {add
+            ? submitting
+              ? "Objavljivanje..."
+              : "Objavi"
+            : submitting
+              ? "Spremanje..."
+              : "Spremi"}
         </button>
       </div>
       <ul className="flex gap-18 items-center pt-2 px-4 text-lg">

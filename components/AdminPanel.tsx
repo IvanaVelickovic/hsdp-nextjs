@@ -11,6 +11,10 @@ interface AdminPanelProps {
 const AdminPanel = ({ articles }: AdminPanelProps) => {
   const router = useRouter();
 
+  const handleEdit = (articleId: number) => {
+    router.push(`/admin/dashboard/edit/${articleId}`);
+  };
+
   return (
     <div className="flex flex-col gap-y-3 px-7 pb-8 bg-background">
       <div className="flex justify-between items-center pt-6 pb-3">
@@ -42,7 +46,7 @@ const AdminPanel = ({ articles }: AdminPanelProps) => {
             </p>
           </div>
           <div className="flex w-[10%] justify-end py-3 gap-x-1.5">
-            <button>
+            <button onClick={() => handleEdit(article?.article_id)}>
               <img
                 src="/icons/icon_edit.png"
                 className="h-11 cursor-pointer"
