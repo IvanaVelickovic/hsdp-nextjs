@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface AddArticleHeaderProps {
   selected: number;
@@ -16,15 +17,25 @@ const AddArticleHeader = ({
   add,
 }: AddArticleHeaderProps) => {
   const selectedStyle = "border-b-2 px-2 cursor-pointer";
+
+  const router = useRouter();
+
+  const handleExit = () => {
+    const confirmed = confirm(
+      "Imate nespremljene promjene. Želite li napustiti stranicu?",
+    );
+    if (confirmed) router.push("/admin/dashboard");
+  };
+
   return (
     <div className="bg-white pt-4 px-6">
       <div className="flex items-center justify-between py-2">
         <div className="flex gap-4">
-          <Link href="/admin/dashboard" className="">
+          <button onClick={handleExit} className="">
             <p className="text-3xl hover:bg-green-200 px-2 py-0.5 rounded-lg">
               X
             </p>
-          </Link>
+          </button>
           <h1 className="text-header text-3xl font-semibold">
             {add ? "Novi članak" : "Doradi članak"}
           </h1>

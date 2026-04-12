@@ -2,12 +2,16 @@
 
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const AdminLogin = () => {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     const form = e.currentTarget;
     const email = (form.elements.namedItem("email") as HTMLInputElement).value;
     const password = (form.elements.namedItem("password") as HTMLInputElement)
@@ -19,10 +23,12 @@ const AdminLogin = () => {
     });
 
     if (error) {
+      setLoading(false);
       alert("Pogrešan email ili lozinka");
       return;
     }
 
+    setLoading(false);
     router.push("/admin/dashboard");
   };
 
@@ -57,8 +63,14 @@ const AdminLogin = () => {
             className="bg-dark-green w-full text-white text-lg py-1.5 rounded-xl mt-3 cursor-pointer"
             type="submit"
           >
-            Login
+            {loading ? "Učitavanje" : "Prijavi se"}
           </button>
+          {loading && (
+            <p className="mt-3 gap-y-0 text-red-800">
+              Učitavanje može potrajati i nekoliko minuta. Molimo vas
+              pričekajte.
+            </p>
+          )}
         </form>
       </div>
     </div>

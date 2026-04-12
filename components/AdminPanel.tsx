@@ -3,16 +3,35 @@
 import { Article } from "@/lib/types";
 import formatDate from "@/lib/formatDate";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 
 interface AdminPanelProps {
   articles: Article[];
+  setArticles: React.Dispatch<React.SetStateAction<Article[]>>;
 }
 
-const AdminPanel = ({ articles }: AdminPanelProps) => {
+const AdminPanel = ({ articles, setArticles }: AdminPanelProps) => {
   const router = useRouter();
 
   const handleEdit = (articleId: number) => {
     router.push(`/admin/dashboard/edit/${articleId}`);
+  };
+
+  const handleDelete = async (articleId: number) => {
+    const confirmed = confirm("Jeste li sigurni da želite obrisati članak?");
+    if (!confirmed) return;
+
+    const { error } = await supabase
+      .from("articles")
+      .update({ is_deleted: true })
+      .eq("article_id", articleId);
+
+    if (error) {
+      throw new Error(error.message);
+    } else {
+      setArticles((prev) => prev.filter((a) => a.article_id !== articleId));
+      window.alert("Uspješno obrisano!");
+    }
   };
 
   return (
@@ -52,7 +71,7 @@ const AdminPanel = ({ articles }: AdminPanelProps) => {
                 className="h-11 cursor-pointer"
               ></img>
             </button>
-            <button>
+            <button onClick={() => handleDelete(article?.article_id)}>
               <img
                 src="/icons/icon_delete.png"
                 className="h-9 cursor-pointer"

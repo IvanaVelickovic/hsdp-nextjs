@@ -1,13 +1,37 @@
 "use client";
 
+import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const Header = () => {
+interface HeaderProps {
+  admin?: boolean;
+}
+
+const Header = ({ admin = false }: HeaderProps) => {
   const navStyle = "hover:cursor-pointer hover:text-white";
   const selectedStyle = " border-b-1 border-gray-200";
 
   const pathname = usePathname();
+
+  const [adminLoggedIn, setAdminLoggedIn] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data } = await supabase.auth.getUser();
+      setAdminLoggedIn(!!data.user);
+    };
+    checkAuth();
+  });
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    router.refresh();
+    router.push("/");
+  };
 
   return (
     <>
@@ -37,6 +61,13 @@ const Header = () => {
               O nama
             </li>
           </Link>
+          {admin && adminLoggedIn && (
+            <button onClick={handleLogOut}>
+              <li className="bg-white text-dark-green px-5 py-1 rounded-md font-semibold cursor-pointer">
+                Odjavi se
+              </li>
+            </button>
+          )}
         </ul>
       </header>
 

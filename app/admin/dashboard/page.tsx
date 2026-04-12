@@ -8,28 +8,14 @@ import Header from "@/components/Header";
 import AdminPanel from "@/components/AdminPanel";
 import Footer from "@/components/Footer";
 import { Article } from "@/lib/types";
+import { useRequireAuth } from "@/lib/useRequireAuth";
 
 export default function AdminDashboard() {
   const router = useRouter();
 
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        router.push("/admin");
-      } else {
-        setUser(user);
-      }
-      setLoading(false);
-    };
-    checkAuth();
-  }, []);
+  const { user, loading } = useRequireAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,8 +35,8 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <Header></Header>
-      <AdminPanel articles={articles}></AdminPanel>
+      <Header admin></Header>
+      <AdminPanel articles={articles} setArticles={setArticles}></AdminPanel>
       <Footer></Footer>
     </>
   );

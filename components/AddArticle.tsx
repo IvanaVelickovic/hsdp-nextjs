@@ -41,6 +41,34 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
   const [featuredIndex, setFeaturedIndex] = useState<number | null>(null);
 
   useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+
+    const handlePopState = () => {
+      const confirmed = confirm(
+        "Imate nespremljene promjene. Želite li napustiti stranicu?",
+      );
+      if (!confirmed) {
+        window.history.pushState(null, "", window.location.href);
+      } else {
+        window.removeEventListener("popstate", handlePopState);
+        window.history.back();
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!articleId) return;
 
     const fetchArticle = async () => {
@@ -454,7 +482,9 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
                 <input
                   type="text"
                   name="images_author"
-                  value={article.images_author}
+                  value={
+                    article.images_author == "NULL" ? "" : article.images_author
+                  }
                   onChange={(e) => handleChange(e)}
                   placeholder="Unesite autora slika ili ostavite prazno"
                   className="bg-white border border-gray-500 rounded-lg text-[1.19rem] py-1.5 px-3.5 text-header/90"
