@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import MainPage from "@/components/MainPage";
 import { supabase } from "@/lib/supabaseClient";
 
-export const dynamic = "force-static";
+export const revalidate = 60;
 
 export default async function Home() {
   const { data: articles } = await supabase
