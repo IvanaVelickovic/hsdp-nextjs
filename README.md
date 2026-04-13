@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HSDP Web Application
 
-## Getting Started
+Official website for HSDP (Hrvatsko-slovensko društvo prijateljstva) - an organization dedicated to fostering cultural and social connections between Croatia and Slovenia. 
+The application was built with Next.js and Supabase.
 
-First, run the development server:
+## About
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+A full-stack web application featuring a public-facing news/article section and a protected admin panel for content management.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Explore and read articles with image galleries
+- Admin panel for creating, editing, and deleting articles
+- Image upload to Supabase Storage
+- Secure admin authentication
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Backend**: Supabase (PostgreSQL, Auth, Storage)
+- **Deployment**: Vercel
+- **DNS/CDN**: Cloudflare
 
-To learn more about Next.js, take a look at the following resources:
+## Live Demo
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[hsdp-org.hr](https://hsdp-org.hr)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Screenshots
+The following screenshots showcase the admin panel functionality. The first image shows the article dashboard, where articles can be viewed, edited, created, or deleted. 
+The remaining images show the article creation form, which includes an image drop zone for easy upload. 
 
-## Deploy on Vercel
+<img src="screenshots/admin_panel.png" width="600" />  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<img src="screenshots/add_article.png" width="600" />  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<img src="screenshots/add_article2.png" width="600" />
+
+
+## License
+
+© 2025 HSDP. All rights reserved.  
+This code is publicly available for viewing purposes only. Copying, using, or distributing any part of this codebase without written permission from the author is not permitted.
