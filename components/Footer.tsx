@@ -11,7 +11,7 @@ const Footer = () => {
         </div>
         <div>
           <h4>Kontakt</h4>
-          <p className="text-xs pl-2 lg:pl-0 py-1">Email: email@email.hr</p>
+          <p className="text-xs pl-2 lg:pl-0 py-1">Email: info@hsdp-org.hr</p>
         </div>
       </div>
       <div className="flex justify-center border-t border-gray-200 w-4/5 mt-1 text-[8px] lg:text-[10px] pt-1">
