@@ -30,21 +30,21 @@ const MainPage = ({ articles, currentPage, totalPages }: MainPageProps) => {
 
       {/* Pagination Controls */}
       {totalPages >= 1 && (
-        <div className="flex justify-center items-center gap-4 mt-12">
+        <div className="flex justify-center items-center lg:gap-4 gap-2.5 mt-12">
           {currentPage > 1 ? (
             <Link
               href={`/?page=${currentPage - 1}`}
-              className="lg:text-[0.925rem] text-[0.8rem] px-4 py-2 border border-header/80 text-header rounded-lg hover:bg-gray-100 transition"
+              className="lg:text-[0.925rem] text-[0.75rem] lg:px-4 px-2 py-2 border border-header/80 text-header rounded-lg hover:bg-gray-100 transition"
             >
               {"<"} Prethodna
             </Link>
           ) : (
-            <span className="lg:text-[0.925rem] text-[0.8rem] px-4 py-2 border border-header/45 rounded-lg text-header/45 cursor-not-allowed">
+            <span className="lg:text-[0.925rem] text-[0.75rem] lg:px-4 px-2 py-2 border border-header/45 rounded-lg text-header/45 cursor-not-allowed">
               {"<"} Prethodna
             </span>
           )}
 
-          <span className="lg:text-[0.925rem] text-[0.8rem] text-paragraph">
+          <span className="lg:text-[0.925rem] text-[0.75rem] text-paragraph">
             Stranica <span className="text-header">{currentPage}</span> od{" "}
             <span className="text-header">{totalPages}</span>
           </span>
@@ -52,12 +52,12 @@ const MainPage = ({ articles, currentPage, totalPages }: MainPageProps) => {
           {currentPage < totalPages ? (
             <Link
               href={`/?page=${currentPage + 1}`}
-              className="lg:text-[0.925rem] text-[0.8rem] px-4.5 py-2 border border-header/80 text-header rounded-lg hover:bg-gray-100 transition"
+              className="lg:text-[0.925rem] text-[0.75rem] lg:px-4.5 px-2.5 py-2 border border-header/80 text-header rounded-lg hover:bg-gray-100 transition"
             >
               Sljedeća {">"}
             </Link>
           ) : (
-            <span className="lg:text-[0.925rem] text-[0.8rem] px-4.5 py-2 border border-header/45 rounded-lg text-header/45 cursor-not-allowed">
+            <span className="lg:text-[0.925rem] text-[0.75rem] lg:px-4.5 px-2.5 py-2 border border-header/45 rounded-lg text-header/45 cursor-not-allowed">
               Sljedeća {">"}
             </span>
           )}
