@@ -2,6 +2,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import MainPage from "@/components/MainPage";
 import { supabase } from "@/lib/supabaseClient";
+import { redirect } from "next/navigation";
 
 export const revalidate = 60;
 
@@ -13,6 +14,9 @@ export default async function Home({
   searchParams: Promise<{ page?: string }>;
 }) {
   const params = await searchParams;
+  if (params?.page?.endsWith("/admin") || params?.page === "admin") {
+    redirect("/admin");
+  }
   const currentPage = Number(params?.page) || 1;
 
   const from = (currentPage - 1) * PAGE_SIZE;
