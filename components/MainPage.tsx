@@ -58,7 +58,7 @@ const MainPage = ({ articles, currentPage, totalPages }: MainPageProps) => {
             </Link>
           ) : (
             <span className="text-[0.925rem] px-4.5 py-2 border border-header/45 rounded-lg text-header/45 cursor-not-allowed">
-              Sljedeća
+              Sljedeća {">"}
             </span>
           )}
         </div>
