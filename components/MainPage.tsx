@@ -1,11 +1,14 @@
+import Link from "next/link";
 import Card from "./Card";
 import { Article } from "@/lib/types";
 
 interface MainPageProps {
   articles: Article[];
+  currentPage: number;
+  totalPages: number;
 }
 
-const MainPage = ({ articles }: MainPageProps) => {
+const MainPage = ({ articles, currentPage, totalPages }: MainPageProps) => {
   return (
     <div className="w-screen min-h-[90vh] flex flex-col justify-center bg-background pb-12">
       <div className="flex flex-col items-center py-7">
@@ -24,6 +27,42 @@ const MainPage = ({ articles }: MainPageProps) => {
           <Card key={i} article={article}></Card>
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages >= 1 && (
+        <div className="flex justify-center items-center gap-4 mt-12">
+          {currentPage > 1 ? (
+            <Link
+              href={`/?page=${currentPage - 1}`}
+              className="text-[0.925rem] px-4 py-2 border border-header/80 text-header rounded-lg hover:bg-gray-100 transition"
+            >
+              {"<"} Prethodna
+            </Link>
+          ) : (
+            <span className="text-[0.925rem] px-4 py-2 border border-header/45 rounded-lg text-header/45 cursor-not-allowed">
+              {"<"} Prethodna
+            </span>
+          )}
+
+          <span className="text-[0.925rem] text-paragraph">
+            Stranica <span className="text-header">{currentPage}</span> od{" "}
+            <span className="text-header">{totalPages}</span>
+          </span>
+
+          {currentPage < totalPages ? (
+            <Link
+              href={`/?page=${currentPage + 1}`}
+              className="text-[0.925rem] px-4.5 py-2 border border-header/80 text-header rounded-lg hover:bg-gray-100 transition"
+            >
+              Sljedeća {">"}
+            </Link>
+          ) : (
+            <span className="text-[0.925rem] px-4.5 py-2 border border-header/45 rounded-lg text-header/45 cursor-not-allowed">
+              Sljedeća
+            </span>
+          )}
+        </div>
+      )}
     </div>
   );
 };
