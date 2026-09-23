@@ -20,4 +20,5 @@ export interface Article {
   images: Image[];
   images_author: string;
   description_paragraph: string;
+  is_published: boolean;
 }

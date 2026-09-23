@@ -29,6 +29,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
     images: [],
     images_author: "",
     description_paragraph: "",
+    is_published: false,
   });
 
   const [text, setText] = useState("");
@@ -120,17 +121,18 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
     setArticle((prev) => ({ ...prev, [name]: value }));
   };
 
-  const insertArticle = async () => {
+  const insertArticle = async (articleData: typeof article) => {
     const { data: insertedArticle, error: articleError } = await supabase
       .from("articles")
       .insert({
-        title: article.title,
-        author: article.author,
-        date: article.date,
+        title: articleData.title,
+        author: articleData.author,
+        date: articleData.date || null,
         thumbnail: null,
         images_author:
-          article.images_author == "" ? null : article.images_author,
-        description_paragraph: article.description_paragraph,
+          articleData.images_author == "" ? null : articleData.images_author,
+        description_paragraph: articleData.description_paragraph,
+        is_published: articleData.is_published,
       })
       .select("article_id")
       .single();
@@ -197,8 +199,8 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
     if (error) throw new Error(error.message);
   };
 
-  const createArticle = async () => {
-    const articleId = await insertArticle();
+  const createArticle = async (articleData: typeof article) => {
+    const articleId = await insertArticle(articleData);
     console.log(articleId);
 
     const { uploadedUrls, thumbnailUrl } = await uploadImages(articleId);
@@ -215,24 +217,33 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
 
     await updateThumbnail(articleId, thumbnailUrl);
 
-    alert("Članak uspješno objavljen!");
+    alert(
+      `Članak uspješno ${articleData.is_published ? "objavljen!" : "spremljen!"}`,
+    );
+
     router.push("/admin/dashboard");
   };
 
-  const updateArticle = async (articleId: number) => {
+  const updateArticle = async (
+    articleId: number,
+    articleData: typeof article,
+  ) => {
     // 1. update articles
-    await supabase
+    const { error: updateError } = await supabase
       .from("articles")
       .update({
-        title: article.title,
-        author: article.author,
-        date: article.date,
+        title: articleData.title,
+        author: articleData.author,
+        date: articleData.date,
         thumbnail: null,
         images_author:
-          article.images_author == "" ? null : article.images_author,
-        description_paragraph: article.description_paragraph,
+          articleData.images_author == "" ? null : articleData.images_author,
+        description_paragraph: articleData.description_paragraph,
+        is_published: articleData.is_published,
       })
       .eq("article_id", articleId);
+
+    if (updateError) throw new Error(updateError.message);
 
     // 2. uploadaj nove slike → dobiješ nove URL-ove
     const { uploadedUrls, thumbnailUrl } = await uploadImages(articleId);
@@ -262,18 +273,23 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
           : uploadedUrls[featuredIndex]; // nova
     await updateThumbnail(articleId, thumbnail ?? "");
 
-    alert("Članak uspješno promijenjen!");
+    alert(
+      `Članak uspješno promijenjen i ${articleData.is_published ? "objavljen!" : "spremljen kao skica!"}`,
+    );
     router.push("/admin/dashboard");
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (published: boolean) => {
     setSubmitting(true);
+
+    const updatedArticle = { ...article, is_published: published };
+    setArticle(updatedArticle);
 
     try {
       if (articleId) {
-        await updateArticle(articleId);
+        await updateArticle(articleId, updatedArticle);
       } else {
-        await createArticle();
+        await createArticle(updatedArticle);
       }
     } catch (err: any) {
       alert(`Greška: ${err.message}`);
@@ -291,6 +307,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
           submitting={submitting}
           onSubmit={handleSubmit}
           add={articleId ? false : true}
+          isPublished={article.is_published}
         ></AddArticleHeader>
         {selected == 0 && (
           <form className="flex flex-col py-6 px-20">
@@ -365,7 +382,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
                   type="date"
                   name="date"
                   placeholder="Unesite datum"
-                  value={article.date}
+                  value={article.date ?? ""}
                   onChange={(e) => handleChange(e)}
                   className="bg-white border border-gray-500 rounded-lg text-[1.19rem] py-1.5 px-3.5 text-header/90"
                 ></input>
@@ -482,9 +499,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
                 <input
                   type="text"
                   name="images_author"
-                  value={
-                    article.images_author == "NULL" ? "" : article.images_author
-                  }
+                  value={article.images_author ?? ""}
                   onChange={(e) => handleChange(e)}
                   placeholder="Unesite autora slika ili ostavite prazno"
                   className="bg-white border border-gray-500 rounded-lg text-[1.19rem] py-1.5 px-3.5 text-header/90"

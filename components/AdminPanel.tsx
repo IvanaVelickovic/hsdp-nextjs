@@ -54,9 +54,23 @@ const AdminPanel = ({ articles, setArticles }: AdminPanelProps) => {
           key={article?.article_id}
         >
           <div className="w-[90%]">
-            <h4 className="text-header text-[1.1rem] font-semibold pb-1">
-              {article?.title}
-            </h4>
+            <div className="flex gap-2 items-baseline mb-1">
+              <h4 className="text-header text-[1.1rem] font-semibold">
+                {article?.title}
+              </h4>
+              {article?.is_published && (
+                <div className="flex items-center gap-x-0.5 bg-[#A4F4CF] rounded-lg px-2">
+                  <img src="/icons/globe_icon.png"></img>
+                  <p className="text-[#006045] text-[0.95rem]">Objavljeno</p>
+                </div>
+              )}
+              {!article?.is_published && (
+                <div className="flex items-center gap-x-0.5 bg-[#FEF3C6] rounded-lg px-2">
+                  <img src="/icons/save_icon.png"></img>
+                  <p className="text-[#973C00] text-[0.95rem]">Skica</p>
+                </div>
+              )}
+            </div>
             <p className="text-paragraph text-[0.9rem] pb-2 text-justify">
               {article?.description_paragraph}
             </p>

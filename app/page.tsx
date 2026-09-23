@@ -10,6 +10,7 @@ export default async function Home() {
     .from("articles")
     .select("*, images(*), paragraphs(*)")
     .eq("is_deleted", false)
+    .eq("is_published", true)
     .order("date", { ascending: false });
 
   return (
