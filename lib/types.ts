@@ -16,9 +16,10 @@ export interface Article {
   author: string;
   date: string;
   thumbnail: string;
-  paragraphs: Paragraph[];
+  //paragraphs: Paragraph[];
   images: Image[];
   images_author: string;
   description_paragraph: string;
   is_published: boolean;
+  content: string;
 }

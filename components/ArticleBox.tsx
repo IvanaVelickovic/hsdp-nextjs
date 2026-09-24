@@ -31,13 +31,18 @@ const ArticleBox = ({ article, setPreviewIndex }: ArticleProps) => {
         </div>
       </div>
 
-      <div className="py-4 px-2 border-b-2 border-gray-300 text-header text-justify">
+      {/*<div className="py-4 px-2 border-b-2 border-gray-300 text-header text-justify">
         {article?.paragraphs.map((paragraph) => (
           <p className="py-1" key={paragraph.paragraph_id}>
             {paragraph.text}
           </p>
         ))}
-      </div>
+      </div>*/}
+
+      <div
+        className="py-4 px-2 border-b-2 border-gray-300 text-header text-justify [&_p:empty]:min-h-[0.75em]"
+        dangerouslySetInnerHTML={{ __html: article?.content ?? "" }}
+      ></div>
 
       <div className="py-5 px-2">
         <div className="lg:flex lg:justify-between lg:items-center text-paragraph pb-3">
@@ -48,15 +53,17 @@ const ArticleBox = ({ article, setPreviewIndex }: ArticleProps) => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          {article?.images.map((image, index) => (
-            <div key={image.image_id} className="overflow-hidden rounded-lg">
-              <img
-                src={image.URL_text}
-                className="cursor-pointer max-h-117.5 rounded-lg transition-transform duration-300 hover:scale-102"
-                onClick={() => openPreview(index)}
-              />
-            </div>
-          ))}
+          {article?.images
+            ?.filter((image) => image.URL_text)
+            .map((image, index) => (
+              <div key={image.image_id} className="overflow-hidden rounded-lg">
+                <img
+                  src={image.URL_text}
+                  className="cursor-pointer max-h-117.5 rounded-lg transition-transform duration-300 hover:scale-102"
+                  onClick={() => openPreview(index)}
+                />
+              </div>
+            ))}
         </div>
       </div>
     </div>

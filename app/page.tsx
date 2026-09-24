@@ -24,7 +24,8 @@ export default async function Home({
 
   const { data: articles, count } = await supabase
     .from("articles")
-    .select("*, images(*), paragraphs(*)", { count: "exact" })
+    //.select("*, images(*), paragraphs(*)", { count: "exact" })
+    .select("*, images(*)", { count: "exact" })
     .eq("is_deleted", false)
     .eq("is_published", true)
     .order("date", { ascending: false })

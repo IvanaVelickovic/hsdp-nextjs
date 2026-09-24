@@ -9,6 +9,7 @@ import AddArticleHeader from "./AddArticleHeader";
 import Card from "./Card";
 import ArticleBox from "./ArticleBox";
 import { useRouter } from "next/navigation";
+import RichTextEditor from "./RichTextEditor";
 
 interface AddArticleProps {
   articleId?: number;
@@ -25,11 +26,12 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
     author: "",
     date: "",
     thumbnail: "",
-    paragraphs: [],
+    //paragraphs: [],
     images: [],
     images_author: "",
     description_paragraph: "",
     is_published: false,
+    content: "",
   });
 
   const [text, setText] = useState("");
@@ -75,14 +77,16 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
     const fetchArticle = async () => {
       const { data, error } = await supabase
         .from("articles")
-        .select("*, paragraphs(*), images(*)")
+        //.select("*, paragraphs(*), images(*)")
+        .select("*, images(*)")
         .eq("article_id", articleId)
         .single();
 
       if (error) return;
 
       setArticle(data);
-      setText(data.paragraphs.map((p: any) => p.text).join("\n\n"));
+      //setText(data.paragraphs.map((p: any) => p.text).join("\n\n"));
+      setText(data.content);
       const images = data.images.map((img: any) => img.URL_text);
       setExistingImages(images);
 
@@ -133,6 +137,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
           articleData.images_author == "" ? null : articleData.images_author,
         description_paragraph: articleData.description_paragraph,
         is_published: articleData.is_published,
+        content: text,
       })
       .select("article_id")
       .single();
@@ -179,7 +184,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
     }
   };
 
-  const insertParagraphs = async (paragraphs: string[], articleId: number) => {
+  /* const insertParagraphs = async (paragraphs: string[], articleId: number) => {
     for (const [index, paragraph] of paragraphs.entries()) {
       const { error } = await supabase.from("paragraphs").insert({
         article_id: articleId,
@@ -188,7 +193,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
       });
       if (error) throw new Error(error.message);
     }
-  };
+  }; */
 
   const updateThumbnail = async (articleId: number, thumbnailUrl: string) => {
     const { error } = await supabase
@@ -208,12 +213,12 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
 
     await insertImages(uploadedUrls, articleId);
 
-    const paragraphs = text
+    /*const paragraphs = text
       .split(/\n\s*\n/)
       .map((p) => p.trim())
-      .filter(Boolean);
+      .filter(Boolean); */
 
-    await insertParagraphs(paragraphs, articleId);
+    //await insertParagraphs(paragraphs, articleId);
 
     await updateThumbnail(articleId, thumbnailUrl);
 
@@ -240,6 +245,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
           articleData.images_author == "" ? null : articleData.images_author,
         description_paragraph: articleData.description_paragraph,
         is_published: articleData.is_published,
+        content: text,
       })
       .eq("article_id", articleId);
 
@@ -261,8 +267,8 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
       .filter(Boolean);
 
     // 5. isti za paragraphe
-    await supabase.from("paragraphs").delete().eq("article_id", articleId);
-    await insertParagraphs(paragraphs, articleId);
+    //await supabase.from("paragraphs").delete().eq("article_id", articleId);
+    //await insertParagraphs(paragraphs, articleId);
 
     // 6. update thumbnail
     const thumbnail =
@@ -320,6 +326,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
             <input
               type="text"
               name="title"
+              id="title"
               value={article.title}
               placeholder="Unesite naslov članka"
               onChange={(e) => handleChange(e)}
@@ -333,6 +340,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
               Sažetak
             </label>
             <textarea
+              id="description"
               name="description_paragraph"
               value={article.description_paragraph}
               placeholder="Unesite kratki sažetak"
@@ -340,19 +348,17 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
               className="bg-white border border-gray-500 rounded-lg text-[1.19rem] py-1.5 px-3.5 text-header/90 overflow-y-visible h-35"
             ></textarea>
 
-            <label
-              htmlFor="article"
-              className="text-header text-xl font-semibold mb-0.5 mt-7"
-            >
+            <label className="text-header text-xl font-semibold mb-0.5 mt-7">
               Sadržaj
             </label>
-            <textarea
+            {/*<textarea
               name="article"
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Unesite cijeli sadržaj članka, paragrafe odvojite s dvostrukim enterom"
               className="bg-white border border-gray-500 rounded-lg text-[1.19rem] py-1.5 px-3.5 text-header/90 overflow-y-visible h-100"
-            ></textarea>
+            ></textarea> */}
+            <RichTextEditor content={text} onChange={setText}></RichTextEditor>
 
             <div className="flex justify-between items-center mt-7 gap-50">
               <div className="flex flex-col w-1/2">
@@ -364,6 +370,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
                 </label>
                 <input
                   type="text"
+                  id="author"
                   name="author"
                   value={article.author}
                   onChange={(e) => handleChange(e)}
@@ -381,6 +388,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
                 <input
                   type="date"
                   name="date"
+                  id="date"
                   placeholder="Unesite datum"
                   value={article.date ?? ""}
                   onChange={(e) => handleChange(e)}
@@ -498,6 +506,7 @@ const AddArticle = ({ articleId }: AddArticleProps) => {
                 </label>
                 <input
                   type="text"
+                  id="images_author"
                   name="images_author"
                   value={article.images_author ?? ""}
                   onChange={(e) => handleChange(e)}
