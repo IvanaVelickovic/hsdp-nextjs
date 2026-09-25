@@ -12,7 +12,7 @@ const Card = ({ article, disableLink }: CardProps) => {
 
   const content = (
     <div className="flex flex-col h-full shadow-md rounded-2xl bg-white hover:cursor-pointer transition-transform duration-300 hover:scale-101">
-      <div className="h-60 bg-white rounded-t-2xl shadow-sm">
+      <div className="max-h-88 aspect-video bg-white rounded-t-2xl shadow-sm">
         {article.thumbnail && (
           <img
             src={article.thumbnail}

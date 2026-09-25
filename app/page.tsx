@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 export const revalidate = 60;
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 10;
 
 export default async function Home({
   searchParams,
